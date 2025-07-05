@@ -689,8 +689,10 @@ MonoBehaviour:
   m_RaycastHitEvent: {fileID: 11400000, guid: 6ddaf6abbb6e3f6489a5badc62d646ef, type: 2}
   m_InstrumentPrefabs:
   - {fileID: 6694185695649085506, guid: 21c03ee153133614eb0bef5dd9184a50, type: 3}
+  - {fileID: 7759867992877517985, guid: dc5dfcef179a84f4989e00f9d8b5030b, type: 3}
   m_InstrumentNames:
-  - Crazy Drum
+  - African Drum
+  - Village Drum
   m_InstrumentDropdown: {fileID: 778858038}
   m_MaxInstruments: 5
 --- !u!114 &611792961
@@ -1050,7 +1052,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 778858034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.22, y: 2.22, z: 2.22}
   m_ConstrainProportionsScale: 1
@@ -1058,7 +1060,7 @@ RectTransform:
   - {fileID: 1945929095}
   - {fileID: 682426974}
   - {fileID: 183862956}
-  m_Father: {fileID: 9003299402996467222}
+  m_Father: {fileID: 1860850587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1779,6 +1781,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714062279}
   m_CullTransparentMesh: 1
+--- !u!224 &1860850587 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7097418071025371750, guid: b8f7382051281456a93ced9c504c48c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 9003299402996467217}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1887262745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2636,7 +2644,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2581305115919863542, guid: b8f7382051281456a93ced9c504c48c4,
+    - targetCorrespondingSourceObject: {fileID: 7097418071025371750, guid: b8f7382051281456a93ced9c504c48c4,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 778858035}
