@@ -73,9 +73,7 @@ public class DrumHitHandler : MonoBehaviour
         InitializeComponents();
     }
 
-    /// <summary>
-    /// Initialize all required components
-    /// </summary>
+
     void InitializeComponents()
     {
         // Setup audio source
@@ -85,11 +83,9 @@ public class DrumHitHandler : MonoBehaviour
             m_AudioSource = gameObject.AddComponent<AudioSource>();
         }
         
-        // Configure audio source
         m_AudioSource.playOnAwake = false;
         m_AudioSource.volume = m_Volume;
-
-        // Get renderer for visual effects
+        
         m_DrumRenderer = GetComponentInChildren<Renderer>();
         if (m_DrumRenderer != null)
         {
@@ -115,9 +111,7 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when the drum is hit
-    /// </summary>
+
     public void OnDrumHit()
     {
         Debug.Log($"Drum hit: {gameObject.name}");
@@ -138,10 +132,7 @@ public class DrumHitHandler : MonoBehaviour
         ApplyPhysicsEffect();
     }
 
-    /// <summary>
-    /// Called when the drum is hit with position information
-    /// </summary>
-    /// <param name="hitPoint">World position where the drum was hit</param>
+
     public void OnDrumHit(Vector3 hitPoint)
     {
         OnDrumHit();
@@ -154,9 +145,7 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Play the drum hit sound
-    /// </summary>
+
     void PlayDrumSound()
     {
         if (m_AudioSource != null && m_DrumSound != null)
@@ -170,9 +159,7 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Play particle effect at hit location
-    /// </summary>
+
     void PlayParticleEffect()
     {
         if (m_HitEffect != null)
@@ -187,9 +174,7 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Apply physics effect to the drum
-    /// </summary>
+
     void ApplyPhysicsEffect()
     {
         if (m_Rigidbody != null && m_EnablePhysicsResponse)
@@ -200,9 +185,7 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coroutine for hit visual effect
-    /// </summary>
+
     IEnumerator HitVisualEffect()
     {
         if (m_DrumRenderer == null || m_DrumMaterial == null)
@@ -221,29 +204,19 @@ public class DrumHitHandler : MonoBehaviour
         
         m_IsFlashing = false;
     }
-
-    /// <summary>
-    /// Set the drum sound at runtime
-    /// </summary>
-    /// <param name="newSound">New audio clip to use</param>
+    
     public void SetDrumSound(AudioClip newSound)
     {
         m_DrumSound = newSound;
     }
 
-    /// <summary>
-    /// Set the hit effect particle system at runtime
-    /// </summary>
-    /// <param name="newEffect">New particle system to use</param>
+
     public void SetHitEffect(ParticleSystem newEffect)
     {
         m_HitEffect = newEffect;
     }
 
-    /// <summary>
-    /// Adjust the volume of drum hits
-    /// </summary>
-    /// <param name="newVolume">Volume between 0 and 1</param>
+
     public void SetVolume(float newVolume)
     {
         m_Volume = Mathf.Clamp01(newVolume);
@@ -253,18 +226,13 @@ public class DrumHitHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Enable or disable physics response
-    /// </summary>
-    /// <param name="enable">Whether to enable physics effects</param>
+
     public void SetPhysicsResponse(bool enable)
     {
         m_EnablePhysicsResponse = enable;
     }
 
-    /// <summary>
-    /// Test the drum hit effect (useful for debugging)
-    /// </summary>
+
     [ContextMenu("Test Drum Hit")]
     public void TestDrumHit()
     {
