@@ -167,17 +167,30 @@ namespace UnityEngine.XR.ARFoundation.Samples
             GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
             
             var forward = hitPose.pose.rotation * Vector3.up;
-            var offset = forward * k_PrefabHalfSize;
+            var offset = forward * (k_PrefabHalfSize + 0.02f);
             newInstrument.transform.position = hitPose.pose.position + offset;
             newInstrument.transform.parent = hitPose.trackable.transform.parent;
 
+            SetupInstrumentRendering(newInstrument);
+            
             m_PlacedInstruments.Add(newInstrument);
             m_SpawnedObject = newInstrument; // Keep reference to latest
 
             Debug.Log($"Placed instrument #{m_PlacedInstruments.Count}: {prefabToSpawn.name}");
         }
-        
- 
+
+        void SetupInstrumentRendering(GameObject instrument)
+        {
+            Renderer[] renderers = instrument.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null && renderer.material != null)
+                {
+                    renderer.material.renderQueue = 3000;
+                }
+            }
+        }
+
         public void DeleteAllInstruments()
         {
             foreach (GameObject instrument in m_PlacedInstruments)
