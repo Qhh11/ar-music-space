@@ -695,6 +695,8 @@ MonoBehaviour:
   - Village Drum
   m_InstrumentDropdown: {fileID: 778858038}
   m_MaxInstruments: 5
+  m_ShowPlacementPreview: 0
+  m_PreviewMaterial: {fileID: 0}
 --- !u!114 &611792961
 MonoBehaviour:
   m_ObjectHideFlags: 0

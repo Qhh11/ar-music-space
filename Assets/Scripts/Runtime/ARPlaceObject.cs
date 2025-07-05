@@ -33,10 +33,20 @@ namespace UnityEngine.XR.ARFoundation.Samples
         [Tooltip("Maximum number of instruments when in multiple mode")]
         int m_MaxInstruments = 5;
         
+        [Header("Placement Settings")]
+        [SerializeField]
+        [Tooltip("Show preview of placement position")]
+        bool m_ShowPlacementPreview = true;
+        
+        [SerializeField]
+        [Tooltip("Material for placement preview (optional)")]
+        Material m_PreviewMaterial;
+        
         //private objects
         GameObject m_SpawnedObject;
         List<GameObject> m_PlacedInstruments = new List<GameObject>();
         int m_CurrentInstrumentIndex = 0;
+        GameObject m_PreviewObject; 
 
         void Start()
         {
@@ -153,9 +163,84 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
 
             PlaceMultipleInstrument(hitPose, prefabToSpawn);
+            HidePreview();
         }
         
-       
+        public void ShowPlacementPreview(Vector3 position, Quaternion rotation)
+        {
+            if (!m_ShowPlacementPreview) return;
+            
+            GameObject prefabToPreview = GetCurrentPrefab();
+            if (prefabToPreview == null) return;
+            
+            
+            if (m_PreviewObject == null)
+            {
+                m_PreviewObject = Instantiate(prefabToPreview);
+                SetupPreviewObject(m_PreviewObject);
+            }
+            
+            
+            m_PreviewObject.transform.position = position;
+            m_PreviewObject.transform.rotation = rotation;
+            m_PreviewObject.SetActive(true);
+        }
+        
+  
+        public void HidePreview()
+        {
+            if (m_PreviewObject != null)
+            {
+                m_PreviewObject.SetActive(false);
+            }
+        }
+        
+     
+        void SetupPreviewObject(GameObject preview)
+        {
+            // Make preview semi-transparent
+            Renderer[] renderers = preview.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null)
+                {
+                    Material[] materials = renderer.materials;
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        if (m_PreviewMaterial != null)
+                        {
+                            materials[i] = m_PreviewMaterial;
+                        }
+                        else
+                        {
+                            // Create transparent version of original material
+                            materials[i] = new Material(materials[i]);
+                            Color color = materials[i].color;
+                            color.a = 0.5f; 
+                            materials[i].color = color;
+                            
+                          
+                            materials[i].SetFloat("_Mode", 3); 
+                            materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                            materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                            materials[i].SetInt("_ZWrite", 0);
+                            materials[i].DisableKeyword("_ALPHATEST_ON");
+                            materials[i].EnableKeyword("_ALPHABLEND_ON");
+                            materials[i].DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                            materials[i].renderQueue = 3000;
+                        }
+                    }
+                    renderer.materials = materials;
+                }
+            }
+            
+           
+            Collider[] colliders = preview.GetComponentsInChildren<Collider>();
+            foreach (Collider collider in colliders)
+            {
+                Destroy(collider);
+            }
+        }
         void PlaceMultipleInstrument(ARRaycastHit hitPose, GameObject prefabToSpawn)
         {
             if (m_PlacedInstruments.Count >= m_MaxInstruments)
@@ -164,21 +249,198 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 return;
             }
 
-            GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
-            
             var forward = hitPose.pose.rotation * Vector3.up;
             var offset = forward * (k_PrefabHalfSize + 0.02f);
-            newInstrument.transform.position = hitPose.pose.position + offset;
+            Vector3 targetPosition = hitPose.pose.position + offset;
+
+            
+            Vector3 safePosition = FindSafePosition(targetPosition, prefabToSpawn, hitPose.trackable.transform);
+
+          
+            GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
+            newInstrument.transform.position = safePosition;
             newInstrument.transform.parent = hitPose.trackable.transform.parent;
 
+           
             SetupInstrumentRendering(newInstrument);
-            
+            SetupInstrumentPhysics(newInstrument);
+
             m_PlacedInstruments.Add(newInstrument);
-            m_SpawnedObject = newInstrument; // Keep reference to latest
+            m_SpawnedObject = newInstrument;
 
             Debug.Log($"Placed instrument #{m_PlacedInstruments.Count}: {prefabToSpawn.name}");
         }
 
+         Vector3 FindSafePosition(Vector3 targetPosition, GameObject prefab, Transform planeTransform)
+        {
+          
+            float objectRadius = GetObjectRadius(prefab);
+            float searchRadius = objectRadius * 1.05f; 
+            
+            Debug.Log($"Searching for safe position around {targetPosition} with search radius {searchRadius}");
+            
+            if (!IsPositionOccupied(targetPosition, searchRadius))
+            {
+                Debug.Log("Target position is safe");
+                return targetPosition;
+            }
+            
+
+            int maxAttempts = 24; 
+            float currentRadius = searchRadius * 0.8f;
+            
+            for (int ring = 1; ring <= 3; ring++)
+            {
+                currentRadius = searchRadius * (0.7f + ring * 0.3f);
+
+                for (int i = 0; i < maxAttempts; i++)
+                {
+                    float angle = (360f / maxAttempts) * i * Mathf.Deg2Rad;
+                    Vector3 localOffset = new Vector3(
+                        Mathf.Cos(angle) * currentRadius,
+                        0,
+                        Mathf.Sin(angle) * currentRadius
+                    );
+                    
+                    Vector3 worldOffset = planeTransform.TransformDirection(localOffset);
+                    Vector3 candidatePosition = targetPosition + worldOffset;
+                    
+                    if (!IsPositionOccupied(candidatePosition, searchRadius) && 
+                        IsPositionOnPlane(candidatePosition, planeTransform))
+                    {
+                        Debug.Log($"Found safe position at distance {currentRadius:F2}m from original target");
+                        return candidatePosition;
+                    }
+                }
+            }
+            
+            Debug.LogWarning("Could not find safe position, placing at original location");
+            return targetPosition;
+        }
+
+
+        bool IsPositionOccupied(Vector3 position, float radius)
+        {
+            
+            foreach (GameObject instrument in m_PlacedInstruments)
+            {
+                if (instrument != null)
+                {
+                    float distance = Vector3.Distance(position, instrument.transform.position);
+                    if (distance < radius)
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            // back up
+            Collider[] colliders = Physics.OverlapSphere(position, radius);
+
+            foreach (Collider collider in colliders)
+            {
+                if (m_PlacedInstruments.Contains(collider.gameObject) || 
+                    IsChildOfPlacedInstrument(collider.gameObject))
+                {
+                    return true;
+                }
+            }
+            
+            Debug.Log("Position is free");
+            return false;
+        }
+        
+        bool IsChildOfPlacedInstrument(GameObject obj)
+        {
+            Transform current = obj.transform;
+            
+            while (current != null)
+            {
+                if (m_PlacedInstruments.Contains(current.gameObject))
+                {
+                    return true;
+                }
+                current = current.parent;
+            }
+            
+            return false;
+        }
+        
+        bool IsPositionOnPlane(Vector3 position, Transform planeTransform)
+        {
+            Vector3 localPosition = planeTransform.InverseTransformPoint(position);
+            
+            float maxDistance = 5f; // Maximum 5 meters from plane center
+            
+            return Mathf.Abs(localPosition.x) < maxDistance && 
+                   Mathf.Abs(localPosition.z) < maxDistance;
+        }
+
+  
+        float GetObjectRadius(GameObject obj)
+        {
+            Collider objCollider = obj.GetComponent<Collider>();
+            if (objCollider != null)
+            {
+                Bounds bounds = objCollider.bounds;
+                float radius = Mathf.Max(bounds.size.x, bounds.size.z) * 0.5f;
+                if (radius > 0.1f)
+                    return radius;
+            }
+            
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer == null)
+                objRenderer = obj.GetComponentInChildren<Renderer>();
+                
+            if (objRenderer != null)
+            {
+                Bounds bounds = objRenderer.bounds;
+                float radius = Mathf.Max(bounds.size.x, bounds.size.z) * 0.5f;
+                if (radius > 0.1f)
+                    return radius;
+            }
+            
+            Vector3 scale = obj.transform.localScale;
+            float scaleRadius = Mathf.Max(scale.x, scale.z) * 0.5f;
+
+            if (scaleRadius > 0.1f)
+                return scaleRadius;
+            
+            Debug.LogWarning($"Using default radius for {obj.name}");
+            return 0.5f; // 50cm default radius
+        }
+        
+        void SetupInstrumentPhysics(GameObject instrument)
+        {
+            Collider existingCollider = instrument.GetComponent<Collider>();
+            
+            if (existingCollider == null)
+            {
+               
+                Collider childCollider = instrument.GetComponentInChildren<Collider>();
+                
+                if (childCollider == null)
+                {
+                    
+                    SphereCollider sphereCollider = instrument.AddComponent<SphereCollider>();
+                    float radius = GetObjectRadius(instrument);
+                    sphereCollider.radius = radius;
+                    sphereCollider.isTrigger = false; 
+                }
+                else
+                {
+                    childCollider.isTrigger = false;
+                }
+            }
+            else
+            {
+                existingCollider.isTrigger = false;
+                Debug.Log($"Using existing collider on {instrument.name}");
+            }
+            
+            Collider[] allColliders = instrument.GetComponentsInChildren<Collider>();
+        }
+        
         void SetupInstrumentRendering(GameObject instrument)
         {
             Renderer[] renderers = instrument.GetComponentsInChildren<Renderer>();
@@ -186,11 +448,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
             {
                 if (renderer != null && renderer.material != null)
                 {
+                    // Set render queue to ensure instruments render above planes
                     renderer.material.renderQueue = 3000;
                 }
             }
         }
-
+        
         public void DeleteAllInstruments()
         {
             foreach (GameObject instrument in m_PlacedInstruments)
@@ -202,10 +465,11 @@ namespace UnityEngine.XR.ARFoundation.Samples
             m_SpawnedObject = null;
             Debug.Log("Deleted all instruments");
         }
-
-
+        
     }
-    
+
 }
+    
+
 
 
