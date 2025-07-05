@@ -91,6 +91,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3945908487103350381}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 78337b1f94671ca43aa6d02aa4b94fbe,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2613658026034501712}
   m_SourcePrefab: {fileID: 100100000, guid: 78337b1f94671ca43aa6d02aa4b94fbe, type: 3}
 --- !u!1 &7759867992877517985 stripped
 GameObject:
@@ -119,3 +123,22 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2613658026034501712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7759867992877517985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac34da1a2cbd404ca68cd83f8e5b50a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DrumSound: {fileID: 8300000, guid: b034397ce1f099f46a42ba2b64b9e24d, type: 3}
+  m_Volume: 0.8
+  m_HitEffect: {fileID: 0}
+  m_HitColor: {r: 1, g: 0, b: 0, a: 1}
+  m_HitEffectDuration: 0.1
+  m_HitForce: 5
+  m_EnablePhysicsResponse: 1
