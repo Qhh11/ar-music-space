@@ -612,6 +612,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ARF XR Origin Set Up
       objectReference: {fileID: 0}
+    - target: {fileID: 8766024634595469703, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+        type: 3}
+      propertyPath: field of view
+      value: 60.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766024634595469703, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+        type: 3}
+      propertyPath: m_FocalLength
+      value: 20.78461
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766024634595469703, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+        type: 3}
+      propertyPath: m_projectionMatrixMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -688,8 +703,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arCameraManager: {fileID: 0}
   manoClient: {fileID: 0}
-  processingInterval: 0.34
-  processEveryFrame: 0
+  processingInterval: 0.1
+  processEveryFrame: 1
 --- !u!114 &611792958
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -532,10 +532,11 @@ public class Client : MonoBehaviour
                     vertices[i][1],
                     vertices[i][2]
                 );
+                // print($"[MANOClient] {vertices[i][0]} {vertices[i][1]} {vertices[i][2]}");
 
                 // 翻转Z轴（相机空间正Z → Unity相机空间负Z）
                 if (flipZ) vertex.z = -vertex.z;
-                vertex.z+=0.5f;
+                // vertex.z += 0.5f;
 
                 unityVertices[i] = vertex; // 直接使用相机空间坐标
             }
@@ -558,7 +559,7 @@ public class Client : MonoBehaviour
             currentHandMesh = new GameObject("MANO Hand Mesh");
             MeshFilter meshFilter = currentHandMesh.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = currentHandMesh.AddComponent<MeshRenderer>();
-            
+
             meshFilter.mesh = mesh;
             meshRenderer.material = handMeshMaterial;
 
@@ -567,6 +568,27 @@ public class Client : MonoBehaviour
             currentHandMesh.transform.localRotation = Quaternion.identity;
             currentHandMesh.transform.localScale = meshScale;
             currentHandMesh.transform.SetParent(targetCamera.transform, false);
+
+            // GameObject cube1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // cube1.transform.SetParent(targetCamera.transform, false);
+            // cube1.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            // cube1.transform.localPosition = new Vector3(0.2f, 0.2f, 0.3f);
+
+            // GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // cube2.transform.SetParent(targetCamera.transform, false);
+            // cube2.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            // cube2.transform.localPosition = new Vector3(-0.2f, 0.2f, 0.3f);
+
+            // GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // cube3.transform.SetParent(targetCamera.transform, false);
+            // cube3.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            // cube3.transform.localPosition = new Vector3(0.2f, -0.2f, 0.3f);
+
+            // GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // cube4.transform.SetParent(targetCamera.transform, false);
+            // cube4.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            // cube4.transform.localPosition = new Vector3(-0.2f, -0.2f, 0.3f);
+            
 
             if (showWireframe)
                 meshRenderer.material.SetFloat("_Wireframe", 1f);
