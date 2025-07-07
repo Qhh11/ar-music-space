@@ -258,6 +258,16 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
           
             GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
+            if (Camera.main != null)
+            {
+                Vector3 origEuler = newInstrument.transform.eulerAngles;         // 原本旋转
+                float camY = Camera.main.transform.eulerAngles.y;                // 摄像头的Y
+
+                // 组合成新的欧拉角
+                Vector3 newEuler = new Vector3(origEuler.x, 180+camY+origEuler.y, origEuler.z);
+
+                newInstrument.transform.rotation = Quaternion.Euler(newEuler);
+            }
             newInstrument.transform.position = safePosition;
             newInstrument.transform.parent = hitPose.trackable.transform.parent;
 

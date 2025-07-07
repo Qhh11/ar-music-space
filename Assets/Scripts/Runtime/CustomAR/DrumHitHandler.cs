@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+using UnityEngine.UI;
+
 namespace UnityEngine.XR.ARFoundation.Samples
 {
     /// <summary>
@@ -11,7 +13,7 @@ public class DrumHitHandler : MonoBehaviour
     [Header("Audio Settings")]
     [SerializeField]
     [Tooltip("Audio clip to play when drum is hit")]
-    AudioClip m_DrumSound;
+    AudioClip[] m_DrumSounds;
 
     [SerializeField]
     [Tooltip("Volume of the drum hit sound")]
@@ -50,13 +52,16 @@ public class DrumHitHandler : MonoBehaviour
     // State tracking
     bool m_IsFlashing = false;
 
+    [SerializeField]
+    Button testbutton;
+
     /// <summary>
     /// Audio clip played when drum is hit
     /// </summary>
-    public AudioClip drumSound
+    public AudioClip[] drumSounds
     {
-        get => m_DrumSound;
-        set => m_DrumSound = value;
+        get => m_DrumSounds;
+        set => m_DrumSounds = value;
     }
 
     /// <summary>
@@ -105,10 +110,12 @@ public class DrumHitHandler : MonoBehaviour
         }
 
         // If no drum sound is assigned, try to load a default one
-        if (m_DrumSound == null)
+        if (m_DrumSounds == null)
         {
             Debug.Log($"No drum sound assigned to {gameObject.name}. Add an audio clip for sound effects.");
         }
+
+        testbutton.onClick.AddListener(OnDrumHit);
     }
 
 
@@ -148,14 +155,20 @@ public class DrumHitHandler : MonoBehaviour
 
     void PlayDrumSound()
     {
-        if (m_AudioSource != null && m_DrumSound != null)
+        if (m_AudioSource != null && m_DrumSounds != null)
         {
-            m_AudioSource.PlayOneShot(m_DrumSound, m_Volume);
+            int index = Random.Range(0, m_DrumSounds.Length);
+            Debug.Log($"playing {index}");
+            m_AudioSource.PlayOneShot(m_DrumSounds[index], m_Volume);
         }
         else if (m_AudioSource != null)
         {
             // Play a simple beep sound as fallback
             Debug.Log($"Playing drum sound: BOOM! (No audio clip assigned)");
+        }
+        else
+        {
+            Debug.Log($"m_AudioSource {m_AudioSource != null}, m_DrumSounds {m_DrumSounds != null}");
         }
     }
 
@@ -205,9 +218,9 @@ public class DrumHitHandler : MonoBehaviour
         m_IsFlashing = false;
     }
     
-    public void SetDrumSound(AudioClip newSound)
+    public void SetDrumSound(AudioClip[] newSounds)
     {
-        m_DrumSound = newSound;
+        m_DrumSounds = newSounds;
     }
 
 
