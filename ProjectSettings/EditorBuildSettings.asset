@@ -188,7 +188,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Meta/MetaSharedAnchors.unity
     guid: 378abe601e1ed4f21b730a80c6caead9
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SimpleAR 1/SimpleAR1.unity
     guid: 9209d6b3c974b3349b05d886be905b33
   m_configObjects:
