@@ -138,7 +138,7 @@ public class Client : MonoBehaviour
     {
         if (isProcessing)
         {
-            LogDebug("Already processing a request. Please wait.");
+           // LogDebug("Already processing a request. Please wait.");
             return;
         }
 
@@ -151,6 +151,10 @@ public class Client : MonoBehaviour
         StartCoroutine(ProcessTextureAndPredict(inputTexture));
     }
 
+    public GameObject getHandmesh()
+    {
+        return currentHandMesh;
+    }
     /// <summary>
     /// Predict hand mesh from camera feed
     /// </summary>
@@ -255,9 +259,9 @@ public class Client : MonoBehaviour
             DestroyImmediate(readableTexture);
         DestroyImmediate(resizedTexture);
 
-        LogDebug(
-            $"Resized image from {originalWidth}x{originalHeight} to {targetSize}x{targetSize} (content: {newWidth}x{newHeight})"
-        );
+        //LogDebug(
+        //    $"Resized image from {originalWidth}x{originalHeight} to {targetSize}x{targetSize} (content: {newWidth}x{newHeight})"
+        //);
 
         return paddedTexture;
     }
@@ -346,7 +350,7 @@ public class Client : MonoBehaviour
                     $"debug_processed_{System.DateTime.Now.Ticks}.jpg",
                     debugBytes
                 );
-                LogDebug("Saved debug processed texture");
+               // LogDebug("Saved debug processed texture");
             }
 
             // Convert to base64
@@ -426,7 +430,7 @@ public class Client : MonoBehaviour
             www.SetRequestHeader("Content-Type", "application/json");
             www.timeout = Mathf.RoundToInt(requestTimeout);
 
-            LogDebug("Sending prediction request to server " + $"{serverURL}/predict");
+           // LogDebug("Sending prediction request to server " + $"{serverURL}/predict");
             float startTime = Time.time;
 
             yield return www.SendWebRequest();
@@ -449,10 +453,6 @@ public class Client : MonoBehaviour
 
                 if (response.success)
                 {
-                    LogDebug(
-                        $"Prediction successful! Time: {inferenceTime:F2}s, Vertices: {response.num_vertices}, Faces: {response.num_faces}"
-                    );
-                    LogDebug($"{response.vertices == null}, {response.faces == null}");
                     CreateAndDisplayMesh(
                         response.GetVerticesAsJaggedArray(),
                         response.GetFacesAsJaggedArray()
@@ -489,9 +489,6 @@ public class Client : MonoBehaviour
                         www.downloadHandler.text
                     );
                     isHealthy = health.model_loaded;
-                    LogDebug(
-                        $"Server health: {health.status}, Model loaded: {health.model_loaded}, Device: {health.device}"
-                    );
                 }
                 catch (System.Exception e)
                 {
@@ -593,7 +590,7 @@ public class Client : MonoBehaviour
             if (showWireframe)
                 meshRenderer.material.SetFloat("_Wireframe", 1f);
 
-            LogDebug($"Created mesh with {vertices.Length} vertices");
+            //LogDebug($"Created mesh with {vertices.Length} vertices");
             OnMeshReceived?.Invoke(mesh);
         }
         catch (System.Exception e)

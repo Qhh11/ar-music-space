@@ -636,6 +636,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 611792960}
+    - targetCorrespondingSourceObject: {fileID: 8766024634595469697, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 611792958}
+    - targetCorrespondingSourceObject: {fileID: 8766024634595469697, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 611792957}
   m_SourcePrefab: {fileID: 100100000, guid: 8f2c1ffdafd49a943ac79dc0ff480220, type: 3}
 --- !u!1 &611792954 stripped
 GameObject:
@@ -660,6 +668,49 @@ MonoBehaviour:
       m_Calls: []
   m_PointCloudPrefab: {fileID: 1854016325464908, guid: 0d4f49e744bffd14eb527ba76c9bba12,
     type: 3}
+--- !u!1 &611792956 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8766024634595469697, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
+    type: 3}
+  m_PrefabInstance: {fileID: 611792953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &611792957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611792956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef63da9e6d9bc3a41babfbf63a1c7c3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arCameraManager: {fileID: 0}
+  manoClient: {fileID: 0}
+  processingInterval: 0.1
+  processEveryFrame: 0
+--- !u!114 &611792958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611792956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4386f9b934e088046a127c3ae004418a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverURL: http://192.168.212.29:5000
+  requestTimeout: 30
+  targetCamera: {fileID: 0}
+  meshScale: {x: 1, y: 1, z: 1}
+  flipZ: 0
+  handMeshMaterial: {fileID: 2100016, guid: a20ea7771cebbda4696ef82ef45481a0, type: 3}
+  showWireframe: 0
+  enableDebugLogs: 1
+  saveDebugTextures: 0
 --- !u!114 &611792959 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7637194992220565852, guid: 8f2c1ffdafd49a943ac79dc0ff480220,
@@ -778,7 +829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &631426038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1603,6 +1654,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1111828220}
   - component: {fileID: 1111828219}
+  - component: {fileID: 1111828221}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1641,6 +1693,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1111828221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111828218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fc871e53abe11489ece53f9dde6f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handMeshClient: {fileID: 611792958}
+  instrumentLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  hitCooldown: 0.2
+  interactionDistance: 0.05
+  useCollisionDetection: 1
+  enableDebugLogs: 1
+  showDebugGizmos: 1
 --- !u!1 &1112218267
 GameObject:
   m_ObjectHideFlags: 0

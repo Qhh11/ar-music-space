@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4410437775708874}
   - component: {fileID: 33709554026697144}
   - component: {fileID: 23151092867026702}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bongo_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

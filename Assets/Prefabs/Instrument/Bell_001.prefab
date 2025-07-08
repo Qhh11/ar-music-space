@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4500640442560884}
   - component: {fileID: 33503439113934706}
   - component: {fileID: 23276407400313038}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bell_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
