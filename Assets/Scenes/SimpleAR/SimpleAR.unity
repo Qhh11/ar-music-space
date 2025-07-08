@@ -1710,10 +1710,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   hitCooldown: 0.2
-  interactionDistance: 0.05
+  interactionDistance: 0.2
   useCollisionDetection: 1
   enableDebugLogs: 1
-  showDebugGizmos: 1
+  showDebugGizmos: 0
 --- !u!1 &1112218267
 GameObject:
   m_ObjectHideFlags: 0

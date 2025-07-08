@@ -250,7 +250,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
 
             var forward = hitPose.pose.rotation * Vector3.up;
-            var offset = forward * (k_PrefabHalfSize + 0.02f);
+            //var offset = forward * (k_PrefabHalfSize + 0.02f);
+            var offset = forward * 0.01f;
             Vector3 targetPosition = hitPose.pose.position + offset;
 
             
@@ -260,10 +261,9 @@ namespace UnityEngine.XR.ARFoundation.Samples
             GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
             if (Camera.main != null)
             {
-                Vector3 origEuler = newInstrument.transform.eulerAngles;         // 原本旋转
-                float camY = Camera.main.transform.eulerAngles.y;                // 摄像头的Y
+                Vector3 origEuler = newInstrument.transform.eulerAngles;         
+                float camY = Camera.main.transform.eulerAngles.y;              
 
-                // 组合成新的欧拉角
                 Vector3 newEuler = new Vector3(origEuler.x, 180+camY+origEuler.y, origEuler.z);
 
                 newInstrument.transform.rotation = Quaternion.Euler(newEuler);
