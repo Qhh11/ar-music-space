@@ -154,8 +154,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
         {
             if (currentHandMesh == null || handCollider == null) return;
 
-            Vector3 handPosition = currentHandMesh.transform.position;
-            if (currentHandMesh.transform.parent != null)
+            Vector3 handPosition = handMeshClient.GetHandMeshCenter();
+            /*if (currentHandMesh.transform.parent != null)
             {
                 Camera cam = currentHandMesh.transform.parent.GetComponent<Camera>();
                 if (cam != null && Vector3.Distance(handPosition, cam.transform.position) < 0.1f)
@@ -163,7 +163,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     handPosition = cam.transform.position + cam.transform.forward * 0.3f;
                     LogDebug($"Corrected hand position from camera center to: {handPosition}");
                 }
-            }
+            }*/
             
             if (Time.frameCount % 60 == 0) 
             {

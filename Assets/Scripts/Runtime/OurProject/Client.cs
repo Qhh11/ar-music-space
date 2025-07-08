@@ -151,6 +151,19 @@ public class Client : MonoBehaviour
         StartCoroutine(ProcessTextureAndPredict(inputTexture));
     }
 
+    public Vector3 GetHandMeshCenter()
+    {
+        
+        MeshRenderer renderer = currentHandMesh.GetComponent<MeshRenderer>();
+     
+    
+        Vector3 center = renderer.bounds.center;
+        Debug.Log($"[Client] Hand mesh bounds center: {center}");
+        Debug.Log($"[Client] Hand mesh bounds size: {renderer.bounds.size}");
+
+        return center;
+    }
+
     public GameObject getHandmesh()
     {
         return currentHandMesh;
@@ -552,6 +565,7 @@ public class Client : MonoBehaviour
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+            
 
             currentHandMesh = new GameObject("MANO Hand Mesh");
             MeshFilter meshFilter = currentHandMesh.AddComponent<MeshFilter>();

@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4386f9b934e088046a127c3ae004418a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverURL: http://192.168.212.29:5000
+  serverURL: http://192.168.31.24:5000
   requestTimeout: 30
   targetCamera: {fileID: 0}
   meshScale: {x: 1, y: 1, z: 1}
