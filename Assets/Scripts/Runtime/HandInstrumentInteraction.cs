@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityEngine.XR.ARFoundation.Samples
 {
@@ -41,7 +42,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
         
         private SphereCollider handCollider;
 
-    void Start()
+        private GameObject grabbedInstrument = null;  // 当前被手抓住的乐器
+        private Vector3 grabbedOffset = Vector3.zero; // 乐器与手的偏移
+        [SerializeField] 
+        private Button transparentModeButton;
+    
+        void Start()
         {
             InitializeHandDetection();
         }
@@ -60,6 +66,25 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 {
                     UpdateDistanceDetection();
                 }
+            }
+            if (InstrumentGlobalState.isTransparentMode && grabbedInstrument != null && currentHandMesh != null)
+            {
+                grabbedInstrument.transform.position = currentHandMesh.transform.position + grabbedOffset;
+            }
+            if (!InstrumentGlobalState.isTransparentMode && grabbedInstrument != null)
+            {
+                grabbedInstrument = null;
+            }
+            if (InstrumentGlobalState.isTransparentMode && grabbedInstrument != null)
+            {
+                bool isOverlapping = IsInstrumentOverlapping();
+                if (transparentModeButton != null)
+                    transparentModeButton.interactable = !isOverlapping;
+            }
+            else
+            {
+                if (transparentModeButton != null)
+                    transparentModeButton.interactable = true;
             }
         }
         
@@ -229,6 +254,28 @@ namespace UnityEngine.XR.ARFoundation.Samples
         
         void TryHitInstrument(GameObject instrument, Vector3 hitPosition)
         {
+            // 新增代码（只在透明模式下抓取和变色）
+            if (InstrumentGlobalState.isTransparentMode)
+            {
+                // 如果当前没有抓住乐器，抓取并变红
+                if (grabbedInstrument == null)
+                {
+                    grabbedInstrument = instrument;
+                    // 保存初始偏移（可以不加，如果你想让乐器正好到手心就不用偏移）
+                    grabbedOffset = instrument.transform.position - currentHandMesh.transform.position;
+
+                    // 把所有Renderer的颜色改为红色
+                    var renderers = instrument.GetComponentsInChildren<Renderer>();
+                    foreach (var r in renderers)
+                    {
+                        foreach (var mat in r.materials)
+                            mat.color = Color.red;
+                    }
+                }
+                // 若已抓住，不再抓取新乐器
+                return;
+            }
+        
             if (instrument == null) return;
 
             LogDebug($"TryHitInstrument called for: {instrument.name} at position {hitPosition}");
@@ -341,5 +388,19 @@ namespace UnityEngine.XR.ARFoundation.Samples
             Debug.LogError($"[HandInstrumentInteraction] {message}");
         }
 
+        bool IsInstrumentOverlapping()
+        {
+            if (grabbedInstrument == null) return false;
+            var allInstruments = GameObject.FindGameObjectsWithTag("Instrument");
+            Vector3 grabbedPos = grabbedInstrument.transform.position;
+            float overlapDistance = 1.05f; // 调整到你乐器实际大小
+            foreach (var go in allInstruments)
+            {
+                if (go == grabbedInstrument) continue;
+                if (Vector3.Distance(grabbedPos, go.transform.position) < overlapDistance)
+                    return true;
+            }
+            return false;
+        }
     }
 }

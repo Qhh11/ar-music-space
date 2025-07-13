@@ -121,22 +121,25 @@ public class DrumHitHandler : MonoBehaviour
 
     public void OnDrumHit()
     {
-        Debug.Log($"Drum hit: {gameObject.name}");
-        
-        // Play audio effect
-        PlayDrumSound();
-        
-        // Play visual effect
-        if (!m_IsFlashing)
+        if (!InstrumentGlobalState.isTransparentMode)
         {
-            StartCoroutine(HitVisualEffect());
+            Debug.Log($"Drum hit: {gameObject.name}");
+        
+            // Play audio effect
+            PlayDrumSound();
+        
+            // Play visual effect
+            if (!m_IsFlashing)
+            {
+                StartCoroutine(HitVisualEffect());
+            }
+        
+            // Play particle effect
+            PlayParticleEffect();
+        
+            // Apply physics effect
+            ApplyPhysicsEffect();
         }
-        
-        // Play particle effect
-        PlayParticleEffect();
-        
-        // Apply physics effect
-        ApplyPhysicsEffect();
     }
 
 
