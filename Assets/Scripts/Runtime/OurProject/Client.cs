@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-
+using System.Linq;
 [System.Serializable]
 public class MANOPredictionRequest
 {
@@ -21,6 +21,7 @@ public class MANOPredictionResponse
     public int num_faces;
     public string message;
     public string error;
+    public float confidence;
 
     public float[][] GetVerticesAsJaggedArray()
     {
@@ -105,6 +106,9 @@ public class Client : MonoBehaviour
     public System.Action<Mesh> OnMeshReceived;
     public System.Action<string> OnErrorOccurred;
     public System.Action<bool> OnServerHealthChanged;
+
+    private Queue<float> confidenceWindow = new Queue<float>();
+    private const int confidenceWindowSize = 5;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -463,6 +467,19 @@ public class Client : MonoBehaviour
                 MANOPredictionResponse response = JsonUtility.FromJson<MANOPredictionResponse>(
                     www.downloadHandler.text
                 );
+
+                confidenceWindow.Enqueue(response.confidence); // response.confidence 为 float
+
+                if (confidenceWindow.Count > confidenceWindowSize)
+                    confidenceWindow.Dequeue();
+
+                // 只有连续5帧都低于0.9才隐藏
+                if (confidenceWindow.Count == confidenceWindowSize && confidenceWindow.Average() < 0.60f)
+                {
+                    LogDebug($"5 frames confidence all low, mesh hidden. Window: [{string.Join(",", confidenceWindow)}]");
+                    ClearMesh();
+                    yield break;
+                }
 
                 if (response.success)
                 {
