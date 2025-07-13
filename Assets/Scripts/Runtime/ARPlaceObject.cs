@@ -126,6 +126,16 @@ namespace UnityEngine.XR.ARFoundation.Samples
             
         }
         
+        public void ScaleCurrentInstrument(float scaleFactor)
+        {
+            if (m_SpawnedObject == null)
+            {
+                Debug.LogWarning("No instrument to scale!");
+                return;
+            }
+            m_SpawnedObject.transform.localScale = Vector3.one * scaleFactor;
+            Debug.Log($"Scaled current instrument to {scaleFactor}¡Á");
+        }
         GameObject GetCurrentPrefab()
         {
             if (m_InstrumentPrefabs != null && 

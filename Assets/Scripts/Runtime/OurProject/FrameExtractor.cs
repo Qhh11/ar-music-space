@@ -12,7 +12,7 @@ public class FrameExtractor : MonoBehaviour
     [SerializeField] private Client manoClient;
 
     [Header("Processing Settings")]
-    [SerializeField][Range(0.1f, 5f)] private float processingInterval = 0.2f;
+    [SerializeField][Range(0.01f, 5f)] private float processingInterval = 0.2f;
     [SerializeField] private bool processEveryFrame = false;
 
     // Internal state
