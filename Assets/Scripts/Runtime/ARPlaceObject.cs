@@ -134,7 +134,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 Debug.LogWarning("No instrument to scale!");
                 return;
             }
-            m_SpawnedObject.transform.localScale = Vector3.one * scaleFactor;
+            m_SpawnedObject.transform.localScale = InstrumentGlobalState.currentScale * scaleFactor;
             Debug.Log($"Scaled current instrument to {scaleFactor}¡Á");
         }
         GameObject GetCurrentPrefab()
@@ -174,7 +174,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 Debug.LogWarning("No prefab selected to place!");
                 return;
             }
-
+            InstrumentGlobalState.currentScale = prefabToSpawn.transform.localScale;
             PlaceMultipleInstrument(hitPose, prefabToSpawn);
             HidePreview();
         }

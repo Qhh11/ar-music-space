@@ -115,7 +115,7 @@ public class DrumHitHandler : MonoBehaviour
             Debug.Log($"No drum sound assigned to {gameObject.name}. Add an audio clip for sound effects.");
         }
 
-        testbutton.onClick.AddListener(OnDrumHit);
+        //testbutton.onClick.AddListener(OnDrumHit);
     }
 
 
