@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace UnityEngine.XR.ARFoundation.Samples
 {
@@ -155,6 +156,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void PlaceObjectAt(object sender, ARRaycastHit hitPose)
         {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return;
             GameObject prefabToSpawn = GetCurrentPrefab();
             if (prefabToSpawn == null)
             {
@@ -259,6 +262,14 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
           
             GameObject newInstrument = Instantiate(prefabToSpawn, hitPose.trackable.transform.parent);
+            var keeper = newInstrument.GetComponent<InstrumentMaterialKeeper>();
+            if (keeper != null && InstrumentGlobalState.isTransparentMode)
+            {
+                keeper.SetAllRenderersMaterial(InstrumentGlobalState.transparentBlueMat);
+                var mb = newInstrument.GetComponent(InstrumentGlobalState.scriptNameToDisable) as MonoBehaviour;
+                if (mb != null)
+                    mb.enabled = false;
+            }
             if (Camera.main != null)
             {
                 Vector3 origEuler = newInstrument.transform.eulerAngles;         

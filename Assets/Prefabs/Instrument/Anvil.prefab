@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2332204}
   - component: {fileID: 6443730}
   - component: {fileID: 5669947218545463643}
+  - component: {fileID: 8047567082592110303}
   m_Layer: 3
   m_Name: Anvil
-  m_TagString: Untagged
+  m_TagString: Instrument
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -135,3 +136,16 @@ MonoBehaviour:
   m_HitForce: 5
   m_EnablePhysicsResponse: 1
   testbutton: {fileID: 0}
+--- !u!114 &8047567082592110303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66d737dcdb744fe42bb251610ae94a9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalMaterials: []
