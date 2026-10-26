@@ -1,5 +1,18 @@
 # AR-Music-Space
 
+A Unity-based augmented reality music playground for Android, combining virtual instrument interaction with a separate hand-mesh server.
+
+## At a glance
+
+- **Stack:** Unity 6, C#, and mobile AR.
+- **Interaction:** instrument controls and hand–instrument interaction scripts.
+- **Runtime:** Android client plus an external hand-mesh server.
+- **Editor version:** `6000.1.9f1`, as recorded in `ProjectSettings/ProjectVersion.txt`.
+
+The server is a separate dependency and is not included in this repository. See the original setup instructions below. Hardware and server integration have not been retested during migration.
+
+Originally developed in the [LRZ GitLab repository](https://gitlab.lrz.de/00000000014B3F3B/ar-music-space). Original contributor attribution and bundled license notices are retained.
+
 #### Installation
 
 Unity: version 6000.1.9f1/6000.1.10f1
